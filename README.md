@@ -87,4 +87,4 @@ This project was develop as a Docker image. The project can be run the command `
 
 ## 👷‍♂️ Author
 
-Hello there ! My name is Ícaro Augusto Maccari Zelioli, and I am a chemical engineergin who is also passionate about data science and data dataengieerings. Check out my profile on [Linkedin](https://www.linkedin.com/in/%C3%ADcaro-augusto-maccari-zelioli/) and my other Data Science works on my [GitHub](https://github.com/IAugustoMZ)
+Hello there ! My name is Ícaro Augusto Maccari Zelioli, and I am a chemical engineer who is also passionate about data science and data dataengieerings. Check out my profile on [Linkedin](https://www.linkedin.com/in/%C3%ADcaro-augusto-maccari-zelioli/) and my other Data Science works on my [GitHub](https://github.com/IAugustoMZ)
