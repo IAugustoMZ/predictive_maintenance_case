@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  pred_maint:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    image: pred_maint
+    container_name: pred_maint
+    tty: true
+    volumes:
+      - ./data:/root/data
+      - ./analysis:/root/analysis
+      - ./modules:/root/modules
