@@ -1,6 +1,6 @@
 # Analysis Folder Documentation
 
-This documentation presents an overview of the content of this folder. More details can be viewed at each specific subfolder and files.
+This documentation presents an overview of the content of this folder. More details can be viewed at each specific subfolder and files. The analysis folder is organized similarly to the CRISP-DM framework proposes for organizing a data-driven project.
 
 ## 💼 1_business_problem
 
@@ -20,5 +20,10 @@ The folder contains notebooks of exploratory data analysis. Also, the main data 
     - There are no duplicated rows or columns
     - The candidates for outliers looked as signal noise and the choice of this first attempt was not to deal with them
     - Features with very low correlation with RUL were removed
-    - There is a very degree of features cross correlation, making it difficult to select only by looking to correlation. An automated feature selection was proposed.
+    - There is a very intense degree of features cross correlation, making it difficult to select only by looking to correlation. An automated feature selection was proposed.
     - The correlations with RUL presented non-linear behavior.
+- Classification Analysis
+    - The data quality issues were treated the same as in the regression analysis
+    - The dataset classes are very imbalaced and thus, demand additional treatment in the modeling step
+    - The classes seem to be fairly separable in a linear way. Linear models are suggested along with the ones proposed in the regression analysis
+    - Hypotheses testing showed a behavior similar to correlation analysis results - i.e., except for `set1` and `set2` tags, all other variables showed statistically significant effect on separating both classes.
