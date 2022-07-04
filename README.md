@@ -79,6 +79,16 @@ Inside the project there are two main folders:
 
 This project was develop as a Docker image. The project can be run the command `docker-compose -f docker-compose.yaml up -d --build` from the root folder of the project, provided that Docker is installed prior to the command.
 
+## 📝 Conclusions
+
+There are opportunities for improving the models. The regression achieved an average error of 20 % of average maximum runtime of all assets, but it suffers from high variance for the same runtime of different assets. To use this model, it is important to have attention when the asset is close to 80 % of the average runtime. A clustering or binning approach could improve the model's performance, by grouping similar assets for each runtime.
+
+The classification model was also biased towards the majority classe (negative classe). Besised the aformentioned approaches (clustering / binning to reduced variance), another opportunity is tune the parameters of SMOTE resampling algorithm. Another opportunity is to change the resampling algorithm. If the model is used to predict the probability of failure in the next 20 cycles, a conservative threshold must be applied to result in good reliability. Yet, the model will produce several false negatives which can increase the cost of early maintenance.
+
+The cost reduction can be achieved by applying both models as predictors of failures, specially when the runtime is close to 70 - 80 % of the average maximum runtime. By looking into each model's features importances, and doing deeper exploratory analysis, one can set thresholds for raising alarms and notofications for engineers and operator, to indicate that models indicate the proximity of failure state.
+
+Finally, the feature importance analysis presented interesting results, showing that not all variables are important for prediction. This fact could be used as inputs for a new round of modeling and data exploratory analysis.
+
 ## ✅ Technologies Applied
 
 - Python
