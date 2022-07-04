@@ -12,3 +12,4 @@ services:
       - ./data:/root/data
       - ./analysis:/root/analysis
       - ./modules:/root/modules
+      - ./models:/root/models
