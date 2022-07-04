@@ -2,19 +2,15 @@
 script for definition of utilities class for Machine Learning
 modeling, experimentation and validation
 """
-import os
 import mlflow
 import warnings
-import pickle
-import json
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from mlflow.models.signature import infer_signature
 from sklearn.metrics import mean_absolute_error, r2_score,\
-    confusion_matrix, recall_score, precision_score, fbeta_score,\
-    make_scorer
+    confusion_matrix, recall_score, precision_score, f1_score
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.model_selection import KFold, StratifiedKFold, RandomizedSearchCV
 from sklearn.feature_selection import RFECV
@@ -36,10 +32,8 @@ np.random.seed(2)
 class MLutils:
 
     # class attributes
-    beta = 0.5          # beta for fbeta score
     REG_SCORE = 'r2'    # regression model selection score
-    CLASS_SCORE = make_scorer(fbeta_score, beta=beta)  # classification model
-    # selection score
+    CLASS_SCORE = 'f1'  # classification model selection score
     RANDOM_SEED = 2     # random seed
     model_alias = {
         'rlu': {
@@ -49,7 +43,7 @@ class MLutils:
             'ada': AdaBoostRegressor(random_state=RANDOM_SEED),
             'xgb': XGBRegressor()
         },
-        'class': {
+        'failure': {
             'lr': LogisticRegression(solver='saga'),
             'rf': RandomForestClassifier(random_state=RANDOM_SEED),
             'ext': ExtraTreesClassifier(random_state=RANDOM_SEED),
@@ -77,17 +71,17 @@ class MLutils:
         },
         'ada': {
             'model__learning_rate': np.random.uniform((0.01, 0.1, 100)),
-            'model__n_estimators': np.random.randint(10, 1000, 200),
+            'model__n_estimators': np.random.randint(10, 20, 5),
         },
         'xgb': {
-            'model__eta': np.random.uniform((0.01, 0.1, 100)),
-            'model__max_depth': np.random.randint(2, 10, 100),
-            'model__lambda': np.random.uniform((0.01, 10, 100)),
-            'model__alpha': np.random.uniform((0.01, 10, 100)),
+            'model__eta': np.random.uniform((0.01, 0.1, 10)),
+            'model__max_depth': np.random.randint(2, 10, 10),
+            'model__lambda': np.random.uniform((0.01, 10, 10)),
+            'model__alpha': np.random.uniform((0.01, 10, 10)),
         },
         'lr': {
-            'model__penalty': ['l1', 'l2', 'elastic'],
-            'model__alpha': np.random.uniform((0.01, 10, 100)),
+            'model__penalty': ['l1', 'l2', 'elasticnet'],
+            'model__C': np.random.uniform((0.01, 10, 100)),
             'model__l1_ratio': np.random.uniform(0.01, 1, 100)
         }
 
@@ -152,10 +146,10 @@ class MLutils:
         # recall score
         recall = recall_score(yreal, ypred)
 
-        # fbeta score
-        fbeta = fbeta_score(yreal, ypred, beta=self.beta)
+        # f1 score
+        f1 = f1_score(yreal, ypred)
 
-        return precision, recall, fbeta
+        return precision, recall, f1
 
     @staticmethod
     def regression_performance_fig(yreal: pd.DataFrame,
@@ -211,7 +205,7 @@ class MLutils:
         fig = plt.figure(figsize=(8, 8))
 
         # create confusion matrix
-        ax = fig.add_subplot(1, 2, 1)
+        ax = fig.add_subplot(1, 1, 1)
         sns.heatmap(
             confusion_matrix(yreal, ypred),
             annot=True,
@@ -265,9 +259,7 @@ class MLutils:
 
             # create selector
             selector = RFECV(
-                estimator=RandomForestClassifier(
-                    random_state=self.RANDOM_SEED
-                ),
+                estimator=LogisticRegression(solver='saga'),
                 step=1,
                 cv=self.cvs,
                 scoring=self.CLASS_SCORE,
@@ -321,7 +313,7 @@ class MLutils:
             self.model_pipe = imb_pipe.Pipeline([
                 ('column_proj', proj_cols),
                 ('scaler', RobustScaler()),
-                ('resample', SMOTE()),
+                ('resample', SMOTE(sampling_strategy='minority')),
                 ('model', estimator)
             ])
 
@@ -351,18 +343,19 @@ class MLutils:
         with mlflow.start_run(run_name=f'{self.alias}_model_{self.target}'):
 
             # select search grid
-            serch_grid = self.search_grid[self.alias]
+            search_grid = self.search_grid[self.alias]
 
             # create hyperparameter tuner
             tuner = RandomizedSearchCV(
                 estimator=self.model_pipe,
-                param_distributions=serch_grid,
+                param_distributions=search_grid,
                 n_iter=50,
                 cv=self.cvs,
                 scoring=scoring,
                 random_state=self.RANDOM_SEED,
                 n_jobs=-1,
-                refit=True
+                refit=True,
+                error_score='raise'
             )
 
             # fit tuner
@@ -422,7 +415,7 @@ class MLutils:
 
             else:
 
-                recall, prec, fbeta = self.calculate_classification_metrics(
+                recall, prec, f1 = self.calculate_classification_metrics(
                     yreal=self.y,
                     ypred=yhat
                 )
@@ -431,12 +424,12 @@ class MLutils:
                 mlflow.log_metrics({
                     'recall': recall,
                     'precision': prec,
-                    'fbeta': fbeta
+                    'f1': f1
                 })
 
                 print(f'Recall Score: {recall}')
                 print(f'Precision Score: {prec}')
-                print(f'Fbeta: {fbeta}')
+                print(f'f1: {f1}')
 
                 # create figure of model performance
                 fig = self.classification_performance_fig(
