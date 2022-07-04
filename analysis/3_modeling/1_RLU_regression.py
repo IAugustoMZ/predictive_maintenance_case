@@ -6,14 +6,14 @@ import pandas as pd
 import datetime
 
 # append the MLutils module
-sys.path.append(os.getcwd())
+sys.path.append(os.path.dirname(os.getcwd()))
 from modules.utils.ml_utils import MLutils
 
 # ignore warnings
 warnings.filterwarnings('ignore')
 
 # define constants
-DATASOURCE = os.path.join(os.getcwd(), 'data/3_model_data/')
+DATASOURCE = os.path.join(os.path.dirname(os.getcwd()), 'data/3_model_data/')
 DATANAME = 'rlu_model_data.csv'
 target = 'rlu'
 

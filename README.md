@@ -84,6 +84,7 @@ This project was develop as a Docker image. The project can be run the command `
 - Python
 - Scikit-Learn
 - Docker and docker-compose
+- Integration and monitoring with MLflow
 
 ## 👷‍♂️ Author
 
