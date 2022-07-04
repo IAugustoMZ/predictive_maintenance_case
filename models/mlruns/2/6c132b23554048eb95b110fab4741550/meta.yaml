@@ -1,0 +1,15 @@
+artifact_uri: file:///root/models/mlruns/2/6c132b23554048eb95b110fab4741550/artifacts
+end_time: 1656900024462
+entry_point_name: ''
+experiment_id: '2'
+lifecycle_stage: deleted
+name: ''
+run_id: 6c132b23554048eb95b110fab4741550
+run_uuid: 6c132b23554048eb95b110fab4741550
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1656900021310
+status: 4
+tags: []
+user_id: root

@@ -1,0 +1,29 @@
+artifact_path: model
+flavors:
+  python_function:
+    env: conda.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    python_version: 3.7.9
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 0.23.1
+mlflow_version: 1.27.0
+model_uuid: 40cfebe219a649feade706ca17153cc4
+run_id: 463e694bc623477fa80639e102274222
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  type: dataframe
+signature:
+  inputs: '[{"name": "tag2", "type": "double"}, {"name": "tag3", "type": "double"},
+    {"name": "tag4", "type": "double"}, {"name": "tag7", "type": "double"}, {"name":
+    "tag8", "type": "double"}, {"name": "tag9", "type": "double"}, {"name": "tag11",
+    "type": "double"}, {"name": "tag12", "type": "double"}, {"name": "tag13", "type":
+    "double"}, {"name": "tag14", "type": "double"}, {"name": "tag15", "type": "double"},
+    {"name": "tag17", "type": "long"}, {"name": "tag20", "type": "double"}, {"name":
+    "tag21", "type": "double"}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+utc_time_created: '2022-07-04 01:55:26.111236'
