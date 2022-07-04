@@ -1,0 +1,4 @@
+artifact_location: file:///root/models/mlruns/1
+experiment_id: '1'
+lifecycle_stage: active
+name: model_rlu
